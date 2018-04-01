@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+
+    <!-- telling container to take care of annotations stuff -->
+    <context:annotation-config />
+
+    <!-- declaring base package -->
+    <context:component-scan base-package="my.antonov" />
+
+    <!-- adding view resolver to show jsp's on browser -->
+    <bean id="viewResolver"
+          class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="viewClass"
+                  value="org.springframework.web.servlet.view.JstlView" />
+        <property name="prefix" value="/" /><!--/WEB-INF/jsp/-->
+        <property name="suffix" value=".jsp" />
+    </bean>
+
+
+    <!-- Data source initialization -->
+    <bean id="dataSource"
+          class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
+        <property name="url" value="jdbc:mysql://localhost:3306/sdec_db?serverTimezone=UTC"/>
+        <property name="username" value="apantonov"/>
+        <property name="password" value="0000"/>
+    </bean>
+
+    <!-- Here we're defining userJDBCTemplate bean -->
+    <bean id="jdbcTemplateUserDao"
+          class="my.antonov.jdbc.dao.impl.JdbcTemplateUserDaoImpl">
+        <property name="dataSource"  ref="dataSource" />
+    </bean>
+
+    <bean id="userService" class="my.antonov.services.impl.UserServiceImpl" />
+
+</beans>
